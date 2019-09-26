@@ -15,8 +15,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   spec.executables   = `git ls-files -- bin/*`.split("\n").map {|f| File.basename(f) }
   spec.require_paths = ["lib"]
-  spec.required_ruby_version = '>= 2.4'
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "activemodel"
+  spec.required_ruby_version = '>= 2.3'
+  spec.add_development_dependency "rake", '~> 12'
+  spec.add_development_dependency "activemodel", '~> 5'
 end
 
