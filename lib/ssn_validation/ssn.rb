@@ -46,7 +46,7 @@ module SsnValidation
     end
 
     def self.test_ssn?(ssn)
-      SsnValidation.config.test_ssns.any? {|p| p.match?(ssn)}
+      SsnValidation.config.test_ssns.any? {|p| p.match(ssn)}
     end
   end
 
