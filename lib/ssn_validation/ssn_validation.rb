@@ -10,9 +10,11 @@ module SsnValidation
 
   class Configuration
     attr_accessor :test_ssns
+    attr_accessor :enable_ascending
 
     def initialize
       @test_ssns = []
+      @enable_ascending = false
     end
   end
 end

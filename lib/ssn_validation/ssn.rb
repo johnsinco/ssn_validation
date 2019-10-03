@@ -18,13 +18,21 @@ module SsnValidation
       (ssn[0..2] == "000") && errors[:zero_area]          = "SSN value contains zeros in area number 000-xx-xxxx"
       (ssn[3..4] == "00") && errors[:zero_group]          = "SSN value contains zeros in group number xxx-00-xxxx"
       (ssn[5..8] == "0000") && errors[:zero_serial]       = "SSN value contains zeros in serial number xxx-xx-0000"
-      ascending?(ssn) && errors[:ascending]               = "SSN value contains all ASCENDING digits"
-      descending?(ssn) && errors[:descending]             = "SSN value contains all DESCENDING digits"
       return errors if errors.any?  # return if ssn conditions fail
 
       # check valid ITIN format last
       invalid_itin?(ssn) && errors[:invalid_itin] = "SSN value contains invalid ITIN format 9xx-[x]x-xxxx"
+
+      # check extra validations for possible fake ssns if enabled
+      errors.merge!(validate_ascending_descending(ssn)) if enable_ascending?
       errors
+    end
+
+    def self.validate_ascending_descending(ssn)
+      errors = {}
+      ascending?(ssn) && errors[:ascending]               = "SSN value contains all ASCENDING digits"
+      descending?(ssn) && errors[:descending]             = "SSN value contains all DESCENDING digits"
+      return errors 
     end
 
     def self.ascending?(ssn)
@@ -47,6 +55,10 @@ module SsnValidation
 
     def self.test_ssn?(ssn)
       SsnValidation.config.test_ssns.any? {|p| p.match(ssn)}
+    end
+
+    def self.enable_ascending?
+      SsnValidation.config.enable_ascending
     end
   end
 

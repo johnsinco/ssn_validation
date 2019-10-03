@@ -52,6 +52,21 @@ class SsnTest < Minitest::Test
           assert_equal({nine_digits: 'SSN value is not 9 digits'}, Ssn.validate('303'))
         end
       end
+     describe 'repeating digits invalid' do
+        it 'is invalid' do
+          assert_equal({repeating: 'SSN value contains repeating digits'}, Ssn.validate('888888888'))
+        end
+      end
+      describe 'invalid ITIN' do
+        it 'is invalid' do
+          assert_equal({invalid_itin: 'SSN value contains invalid ITIN format 9xx-[x]x-xxxx'}, Ssn.validate('900991234'))
+        end
+      end
+    end
+    describe 'do extra validations based on probably bogus SSNSs' do
+      before do
+        SsnValidation.config.enable_ascending = true
+      end
       describe 'ascending digits invalid' do
         it 'is invalid' do
           assert_equal({ascending: 'SSN value contains all ASCENDING digits'}, Ssn.validate('123456789'))
@@ -69,23 +84,13 @@ class SsnTest < Minitest::Test
         it 'is invalid' do
           assert_equal({descending: 'SSN value contains all DESCENDING digits'}, Ssn.validate('876543210'))
           assert_equal({descending: 'SSN value contains all DESCENDING digits'}, Ssn.validate('321098765'))
-          assert_equal({descending: 'SSN value contains all DESCENDING digits'}, Ssn.validate('987654321'))
+          assert_equal({descending: 'SSN value contains all DESCENDING digits'}, Ssn.validate('765432109'))
         end
       end
       describe 'descending digits ex 0 invalid' do
         it 'is invalid' do
           assert_equal({descending: 'SSN value contains all DESCENDING digits'}, Ssn.validate('321987654'))
           assert_equal({descending: 'SSN value contains all DESCENDING digits'}, Ssn.validate('765432198'))
-        end
-      end
-      describe 'repeating digits invalid' do
-        it 'is invalid' do
-          assert_equal({repeating: 'SSN value contains repeating digits'}, Ssn.validate('888888888'))
-        end
-      end
-      describe 'invalid ITIN' do
-        it 'is invalid' do
-          assert_equal({invalid_itin: 'SSN value contains invalid ITIN format 9xx-[x]x-xxxx'}, Ssn.validate('900991234'))
         end
       end
     end
