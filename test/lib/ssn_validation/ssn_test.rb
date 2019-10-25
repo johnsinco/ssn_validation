@@ -8,6 +8,12 @@ class SsnTest < Minitest::Test
       describe 'valid ITIN' do
         it 'is valid' do
           assert_equal({}, Ssn.validate('911781111'))
+          assert_equal({}, Ssn.validate('911501111'))
+          assert_equal({}, Ssn.validate('911651111'))
+          assert_equal({}, Ssn.validate('911651111'))
+          assert_equal({}, Ssn.validate('911881111'))
+          assert_equal({}, Ssn.validate('911901111'))
+          assert_equal({}, Ssn.validate('911991111'))
         end
       end
       describe 'valid SSN' do
@@ -59,7 +65,8 @@ class SsnTest < Minitest::Test
       end
       describe 'invalid ITIN' do
         it 'is invalid' do
-          assert_equal({invalid_itin: 'SSN value contains invalid ITIN format 9xx-[x]x-xxxx'}, Ssn.validate('900991234'))
+          assert_equal({invalid_itin: 'SSN value contains invalid ITIN format 9xx-[x]x-xxxx'}, Ssn.validate('900121234'))
+          assert_equal({invalid_itin: 'SSN value contains invalid ITIN format 9xx-[x]x-xxxx'}, Ssn.validate('900441234'))
         end
       end
     end

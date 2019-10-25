@@ -2,6 +2,7 @@ module SsnValidation
   module Ssn
     DIGITS     = %w[0 1 2 3 4 5 6 7 8 9].freeze
     DIGITS_EX0 = DIGITS[1..-1]
+    VALID_ITIN_GROUPS = [50..65, 70..88, 90..92, 94..99].map(&:to_a).flatten.freeze
 
     # returns a hash of 0..n key/value pairs for ssn validation error codes and a default message for each
     def self.validate(ssn)
@@ -49,8 +50,11 @@ module SsnValidation
       false
     end
 
+    # https://www.irs.gov/irm/part3/irm_03-021-263r
     def self.invalid_itin?(ssn)
-      ssn[0] == "9" && !%w[7 8].include?(ssn[3])
+      return false unless ssn[0] == "9" 
+      group = ssn[3..4].to_i
+      !VALID_ITIN_GROUPS.include?(group)
     end
 
     def self.test_ssn?(ssn)
