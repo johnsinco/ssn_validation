@@ -6,7 +6,7 @@ module SsnValidation
 
     # returns a hash of 0..n key/value pairs for ssn validation error codes and a default message for each
     def self.validate(ssn)
-      ssn    = ssn.to_s
+      ssn    = ssn.to_s.delete('-') # be lenient with incoming dash chars
       errors = {}
       return errors if test_ssn?(ssn)
 
