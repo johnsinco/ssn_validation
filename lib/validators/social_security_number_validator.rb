@@ -7,7 +7,7 @@ module ActiveModel
       def validate_each(record, attribute, value)
         ssn_errors = SsnValidation::Ssn.validate(value)
         return if ssn_errors.blank?
-        ssn_errors.values.each { |error| record.errors.add(attribute, error) }
+        ssn_errors.values.each { |error| record.errors.add(attribute, error, **options) }
       end
     end
   end
